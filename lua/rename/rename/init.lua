@@ -1,14 +1,15 @@
 local lsp = vim.lsp
-local utils = require('cosmic-ui.utils')
-local rename_handler = require('cosmic-ui.rename.handler')
+local utils = require('rename.utils')
+local rename_handler = require('rename.rename.handler')
 local Text = require('nui.text')
+local config = require('rename')
 
 local function rename(popup_opts, opts)
   local Input = require('nui.input')
   local event = require('nui.utils.autocmd').event
   local curr_name = vim.fn.expand('<cword>')
 
-  local user_border = _G.CosmicUI_user_opts.rename.border
+  local user_border = config.user_opts.rename.border
   local width = 25
   if #curr_name > width then
     width = #curr_name
@@ -26,7 +27,7 @@ local function rename(popup_opts, opts)
     relative = 'cursor',
     border = {
       highlight = user_border.highlight,
-      style = user_border.style or _G.CosmicUI_user_opts.border_style,
+      style = user_border.style or config.user_opts.border_style,
       text = {
         top = Text(user_border.title, user_border.title_hl),
         top_align = user_border.title_align,
@@ -35,7 +36,7 @@ local function rename(popup_opts, opts)
   }, popup_opts or {})
 
   opts = utils.merge({
-    prompt = Text(_G.CosmicUI_user_opts.rename.prompt, _G.CosmicUI_user_opts.rename.prompt_hl),
+    prompt = Text(config.user_opts.rename.prompt, config.user_opts.rename.prompt_hl),
     default_value = curr_name,
     on_submit = function(new_name)
       if not (new_name and #new_name > 0) or new_name == curr_name then

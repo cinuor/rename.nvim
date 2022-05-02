@@ -72,7 +72,7 @@ M.Logger = {}
 M.Logger.__index = M.Logger
 
 local function log(type, msg, opts)
-  local title = _G.CosmicUI_user_opts.notify_title
+  local title = M.user_opts.notify_title
   local ok, notify = pcall(require, 'notify')
   if ok then
     notify(
