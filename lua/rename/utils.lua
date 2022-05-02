@@ -1,5 +1,5 @@
 local M = {}
-local rename = require('rename')
+local config = require('rename').user_opts
 
 M.merge = function(...)
   return vim.tbl_deep_extend('force', ...)
@@ -73,7 +73,7 @@ M.Logger = {}
 M.Logger.__index = M.Logger
 
 local function log(type, msg, opts)
-  local title = rename.user_opts.notify_title
+  local title = config.notify_title
   local ok, notify = pcall(require, 'notify')
   if ok then
     notify(

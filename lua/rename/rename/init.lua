@@ -2,7 +2,7 @@ local lsp = vim.lsp
 local utils = require('rename.utils')
 local rename_handler = require('rename.rename.handler')
 local Text = require('nui.text')
-local config = require('rename')
+local config = require('rename').user_opts
 
 local function rename(popup_opts, opts)
   local Input = require('nui.input')

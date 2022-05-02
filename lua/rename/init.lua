@@ -23,7 +23,7 @@ M.user_opts = {}
 M.setup = function(user_opts)
   -- get parsed user opts
   M.user_opts = utils.merge(default_user_opts, user_opts or {})
-  user_opts = M.user_opts
+  -- user_opts = M.user_opts
 end
 
 M.rename = function(popup_opts, opts)
