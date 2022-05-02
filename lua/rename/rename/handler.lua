@@ -1,7 +1,7 @@
-local logger = require('cosmic-ui.utils').Logger
+local logger = require('rename.utils').Logger
 
 return function(...)
-  local utils = require('cosmic-ui.utils')
+  local utils = require('rename.utils')
   local result
   local method
   local err = select(1, ...)
