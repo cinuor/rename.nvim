@@ -3,7 +3,6 @@ local M = {}
 
 local default_border = 'rounded'
 local default_user_opts = {
-  notify_title = 'Rename',
   border_style = default_border,
   rename = {
     border = {
