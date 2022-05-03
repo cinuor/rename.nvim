@@ -1,34 +1,62 @@
-local logger = require('rename.utils').Logger
+local utils = require('rename.utils')
+local logger = utils.Logger
 
-return function(...)
-  local utils = require('rename.utils')
-  local result
-  local method
-  local err = select(1, ...)
-  local is_new = not select(4, ...) or type(select(4, ...)) ~= 'number'
-  if is_new then
-    method = select(3, ...).method
-    result = select(2, ...)
-  else
-    method = select(2, ...)
-    result = select(3, ...)
-  end
+local M =  {}
+
+M.handler = function(err, res, ctx, config)
+  if not res then return end
 
   if err then
     logger:error(("Error running LSP query '%s': %s"):format(method, err))
     return
   end
 
+  local client = vim.lsp.get_client_by_id(ctx.client_id)
+  vim.lsp.util.apply_workspace_edit(res, client.offset_encoding)
+
   local new_word = ''
-  if result and result.changes then
+  if res and res.changes then
     local msg = {}
-    for f, c in pairs(result.changes) do
+    for f, c in pairs(res.changes) do
       new_word = c[1].newText
       table.insert(msg, ('%d changes -> %s'):format(#c, utils.get_relative_path(f)))
     end
     local currName = vim.fn.expand('<cword>')
     logger:log(msg, { title = ('Rename: %s -> %s'):format(currName, new_word) })
   end
-
-  vim.lsp.handlers[method](...)
 end
+
+return M
+
+-- return function(...)
+--   local utils = require('rename.utils')
+--   local result
+--   local method
+--   local err = select(1, ...)
+--   local is_new = not select(4, ...) or type(select(4, ...)) ~= 'number'
+--   if is_new then
+--     method = select(3, ...).method
+--     result = select(2, ...)
+--   else
+--     method = select(2, ...)
+--     result = select(3, ...)
+--   end
+--
+--   if err then
+--     logger:error(("Error running LSP query '%s': %s"):format(method, err))
+--     return
+--   end
+--
+--   local new_word = ''
+--   if result and result.changes then
+--     local msg = {}
+--     for f, c in pairs(result.changes) do
+--       new_word = c[1].newText
+--       table.insert(msg, ('%d changes -> %s'):format(#c, utils.get_relative_path(f)))
+--     end
+--     local currName = vim.fn.expand('<cword>')
+--     logger:log(msg, { title = ('Rename: %s -> %s'):format(currName, new_word) })
+--   end
+--
+--   vim.lsp.handlers[method](...)
+-- end
