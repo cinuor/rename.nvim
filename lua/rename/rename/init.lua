@@ -45,23 +45,15 @@ local function rename(popup_opts, opts)
       local params = lsp.util.make_position_params()
       params.newName = new_name
       lsp.buf_request(0, 'textDocument/rename', params, rename_handler)
-
-      -- local params = vim.lsp.util.make_position_params()
-      -- local results_lsp, _ = vim.lsp.buf_request_sync(0, "textDocument/rename", params)
-      -- local client_id = results_lsp and next(results_lsp) or nil
-      -- local client = vim.lsp.get_client_by_id(client_id)
-      -- require("vim.lsp.util").apply_workspace_edit(resp, client.offset_encoding)
     end,
   }, opts or {})
 
   local input = Input(popup_opts, opts)
 
-  -- mount/open the component
   input:mount()
 
   utils.default_mappings(input)
 
-  -- unmount component when cursor leaves buffer
   input:on(event.BufLeave, function()
     input:unmount()
   end)
